@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import GlassNavigationBar from '@/components/GlassNavigationBar'
+import Footer from "@/components/footer"
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -18,6 +19,7 @@ export default function RootLayout({
       <body>
         <GlassNavigationBar />
         {children}
+        <Footer /> {/* Footer will now show on every page */}
       </body>
     </html>
   )
