@@ -1,103 +1,100 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import React from 'react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { LucideChevronRight } from 'lucide-react'
+import GlassNavigationBar from '@/components/GlassNavigationBar'
+import HeroCTAButton from '@/components/HeroCTAButton'
+import CourseProgressPanel from '@/components/CourseProgressPanel'
+import EthereumDiamondDecorations from '@/components/EthereumDiamondDecorations'
+import NFTCertificateCards from '@/components/NFTCertificateCards'
+import GlassProgressBars from '@/components/GlassProgressBars'
+
+// DYNAMIC TITLE ANIMATION LOGIC
+const titleWords = ['Learn', 'Build', 'Master', 'Accelerate']
+
+function DynamicTitleAnimation() {
+  const [index, setIndex] = React.useState(0)
+  React.useEffect(() => {
+    const interval = setInterval(() => setIndex(i => (i + 1) % titleWords.length), 2000)
+    return () => clearInterval(interval)
+  }, [])
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="h-16 overflow-hidden flex flex-col justify-center">
+      <motion.h1
+        key={index}
+        className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-400 bg-clip-text text-transparent"
+        initial={{ y: 60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -60, opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        {titleWords[index]}
+      </motion.h1>
     </div>
-  );
+  )
+}
+
+// HOMEPAGE MAIN
+export default function Homepage() {
+  // Mock data for illustration. Replace with your actual data fetching.
+  const currentCourses = [
+    { id: 'eth101', title: 'Ethereum Basics', progress: 0.8 },
+    { id: 'nft', title: 'NFTs & Digital Art', progress: 0.35 },
+  ]
+  const progressData = [
+    { label: 'Courses Completed', value: 2, max: 8 },
+    { label: 'Hours Learned', value: 12, max: 40 },
+    { label: 'NFTs Earned', value: 1, max: 10 },
+  ]
+
+  return (
+    <div className="relative min-h-screen bg-gradient-to-tr from-charcoal via-blue-950 to-black overflow-x-hidden">
+      {/* Decorative floating ethereum diamonds */}
+      <EthereumDiamondDecorations />
+
+      {/* Sticky glass navigation bar */}
+      <GlassNavigationBar />
+
+      {/* HERO SECTION */}
+      <main className="relative w-full flex flex-col md:flex-row items-center justify-between px-6 md:px-16 pt-28 md:pt-32 pb-16 md:pb-24 z-10">
+        {/* LEFT: HERO */}
+        <section className="flex-1 flex flex-col items-start gap-8 z-10">
+          <DynamicTitleAnimation />
+          <p className="text-lg md:text-2xl text-white/80 max-w-xl mt-2">
+            The modern Web3 learning hub. Interactive courses, NFT certificates, and a community for the next generation of blockchain innovators.
+          </p>
+          <HeroCTAButton
+            as={Link}
+            href="/courses"
+            className="mt-4"
+            icon={<LucideChevronRight className="ml-2 h-5 w-5" />}
+          >Explore Courses</HeroCTAButton>
+          <div className="flex gap-4 mt-8">
+            <GlassProgressBars data={progressData} />
+          </div>
+        </section>
+        {/* RIGHT: COURSE PANEL */}
+        <aside className="flex-1 flex flex-col items-end w-full md:w-auto md:max-w-xs z-10 mt-12 md:mt-0">
+          <CourseProgressPanel courses={currentCourses} />
+        </aside>
+      </main>
+
+      {/* NFT Certificates Showcase */}
+      <div className="w-full flex justify-center mt-8 md:mt-16 px-4">
+        <NFTCertificateCards />
+      </div>
+
+      {/* Floating background effects */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+      >
+        {/* subtle glass gradients, overlays for effect */}
+        <div className="absolute top-0 left-1/3 w-1/2 h-1/3 bg-gradient-to-br from-cyan-400/10 to-purple-500/10 blur-2xl rounded-full" />
+        <div className="absolute bottom-0 right-0 w-1/3 h-1/4 bg-gradient-to-tl from-blue-400/10 via-purple-400/10 to-cyan-400/5 blur-2xl rounded-full" />
+      </div>
+    </div>
+  )
 }
