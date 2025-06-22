@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { LucideStar, LucideSearch, LucideHeart, LucideChevronLeft, LucideChevronRight } from "lucide-react";
 import Image from "next/image";
 import classNames from "classnames";
+import { useRouter } from "next/navigation";
 
 const categoryFilters = ["Beginner", "Intermediate", "Advanced", "DeFi", "NFTs", "Smart Contracts"];
 const sortOptions = [
@@ -242,6 +243,7 @@ function CoursePreviewModal({
 }
 
 export default function CoursesCatalogPage() {
+  const router = useRouter();
   // Filters state
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -560,7 +562,7 @@ export default function CoursesCatalogPage() {
                 key={course.id}
                 whileHover={{ scale: 1.04 }}
                 className="group rounded-2xl bg-white/10 backdrop-blur-md shadow-glass border border-white/15 flex flex-col cursor-pointer transition-all relative overflow-hidden"
-                onClick={() => setPreview(course)}
+                onClick={() => router.push(`/courses/${course.id}`)} // <-- Navigate to dynamic route
               >
                 <div className="relative aspect-video overflow-hidden">
                   <Image
