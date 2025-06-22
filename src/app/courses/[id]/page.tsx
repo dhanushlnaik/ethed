@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, CheckCircle, PlayCircle, BookOpen, Clock, User, Bookmark, Share2, X } from "lucide-react";
 import classNames from "classnames";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // --- DATA STRUCTURES ---
 
@@ -235,9 +235,7 @@ export default function CoursePage() {
   const [showVideo, setShowVideo] = useState(false);
   const [showEnroll, setShowEnroll] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const router = useRouter();
 
-  // Curriculum expansion/collapse
   function toggleModule(moduleId: string) {
     setCurriculumOpen((prev) =>
       prev.includes(moduleId) ? prev.filter((m) => m !== moduleId) : [...prev, moduleId]
@@ -251,7 +249,7 @@ export default function CoursePage() {
 
   // --- RENDER ---
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 relative pb-16">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 relative pb-16 pt-20">
       {/* Banner + Hero */}
       <section className="relative">
         <div className="relative w-full h-72 sm:h-96">
@@ -352,14 +350,18 @@ export default function CoursePage() {
                               className="overflow-hidden pl-3 mt-2"
                             >
                               {mod.lessons.map((lesson) => (
-                                <li key={lesson.id} className="flex items-center gap-2 py-1 group">
+                                <Link
+                                  key={lesson.id}
+                                  href={`/learn/${sampleCourse.id}/${lesson.id}`}
+                                  className="flex items-center gap-2 py-1 group hover:bg-blue-400/10 rounded transition"
+                                >
                                   {lesson.type === "video" && <PlayCircle className="w-4 h-4 text-cyan-400" />}
                                   {lesson.type === "quiz" && <BookOpen className="w-4 h-4 text-purple-400" />}
                                   {lesson.type === "reading" && <User className="w-4 h-4 text-blue-400" />}
                                   <span className="text-white/80 text-sm flex-1">{lesson.title}</span>
                                   <span className="text-xs text-white/50">{lesson.duration}</span>
                                   {isLessonCompleted(lesson) && <CheckCircle className="w-4 h-4 text-green-400" />}
-                                </li>
+                                </Link>
                               ))}
                             </motion.ul>
                           )}
@@ -404,14 +406,18 @@ export default function CoursePage() {
                         className="overflow-hidden pl-3 mt-2"
                       >
                         {mod.lessons.map((lesson) => (
-                          <li key={lesson.id} className="flex items-center gap-2 py-1 group">
+                          <Link
+                            key={lesson.id}
+                            href={`/learn/${sampleCourse.id}/${lesson.id}`}
+                            className="flex items-center gap-2 py-1 group hover:bg-blue-400/10 rounded transition"
+                          >
                             {lesson.type === "video" && <PlayCircle className="w-4 h-4 text-cyan-400" />}
                             {lesson.type === "quiz" && <BookOpen className="w-4 h-4 text-purple-400" />}
                             {lesson.type === "reading" && <User className="w-4 h-4 text-blue-400" />}
                             <span className="text-white/80 text-sm flex-1">{lesson.title}</span>
                             <span className="text-xs text-white/50">{lesson.duration}</span>
                             {isLessonCompleted(lesson) && <CheckCircle className="w-4 h-4 text-green-400" />}
-                          </li>
+                          </Link>
                         ))}
                       </motion.ul>
                     )}
@@ -467,12 +473,10 @@ export default function CoursePage() {
                     <h5 className="text-white/90 font-semibold mb-2">{mod.title}</h5>
                     <ul className="divide-y divide-white/10 rounded-lg bg-white/5">
                       {mod.lessons.map((lesson) => (
-                        <li
+                        <Link
                           key={lesson.id}
-                          className={classNames(
-                            "flex items-center gap-2 py-2 px-3 group",
-                            isLessonCompleted(lesson) && "bg-blue-400/10"
-                          )}
+                          href={`/learn/${sampleCourse.id}/${lesson.id}`}
+                          className="flex items-center gap-2 py-2 px-3 group hover:bg-blue-400/10 rounded transition"
                         >
                           {lesson.type === "video" && <PlayCircle className="w-4 h-4 text-cyan-400" />}
                           {lesson.type === "quiz" && <BookOpen className="w-4 h-4 text-purple-400" />}
@@ -480,7 +484,7 @@ export default function CoursePage() {
                           <span className="text-white/80 text-sm flex-1">{lesson.title}</span>
                           <span className="text-xs text-white/50">{lesson.duration}</span>
                           {isLessonCompleted(lesson) && <CheckCircle className="w-4 h-4 text-green-400" />}
-                        </li>
+                        </Link>
                       ))}
                     </ul>
                   </div>
