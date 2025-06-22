@@ -5,6 +5,11 @@ import { CourseProgressPanel } from "@/components/course-progress-panel"
 import { EthereumDiamonds } from "@/components/ethereum-diamonds"
 import { NFTCertificates } from "@/components/nft-certificates"
 import { ArrowRight, Play, Users, BookOpen, Trophy } from "lucide-react"
+import Link from "next/link"
+// If the file is actually named 'HeroCtaButton.tsx' (PascalCase), update the import:
+import { HeroCTAButton } from "@/components/HeroCTAButton"
+// Or, if the file is named differently, adjust the path and casing accordingly.
+// If the file does not exist, create it at 'src/components/ui/HeroCtaButton.tsx' and export HeroCTAButton from it.
 
 export default function HomePage() {
   return (
@@ -41,6 +46,14 @@ export default function HomePage() {
                   <Play className="w-5 h-5 mr-2" />
                   Watch Demo
                 </GlassButton>
+
+                <HeroCTAButton
+                  as={Link}
+                  href="/courses"
+                  className="flex items-center justify-center gap-2"
+                >
+                  Explore Courses
+                </HeroCTAButton>
               </div>
 
               {/* Stats */}

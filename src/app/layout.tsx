@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import GlassNavigationBar from '@/components/GlassNavigationBar'
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GlassNavigationBar />
+        {children}
+      </body>
     </html>
   )
 }
