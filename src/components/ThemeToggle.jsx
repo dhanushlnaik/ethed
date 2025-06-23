@@ -2,6 +2,8 @@
 
 import React from "react";
 import { useTheme } from "../context/ThemeContext";
+import ThemeBackgroundWrapper from "@/components/ThemeBackgroundWrapper";
+
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
@@ -11,7 +13,7 @@ export default function ThemeToggle() {
         position: "fixed",
         top: 16,
         right: 16,
-        zIndex: 1000, // High z-index to be above other content
+        zIndex: 1000,
       }}
     >
       <button onClick={toggleTheme} aria-label="Toggle theme">

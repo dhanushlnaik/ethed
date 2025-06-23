@@ -23,7 +23,7 @@ interface CubeData {
   progress: number;
 }
 
-const AnimatedWeb3Background: React.FC = () => {
+const AnimatedWeb3Background: React.FC<{ theme?: string }> = ({ theme }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const frameIdRef = useRef<number | null>(null);
   const [mounted, setMounted] = React.useState(false);
@@ -210,7 +210,7 @@ const AnimatedWeb3Background: React.FC = () => {
         if (cubeData.progress >= 1) {
           const baseColor = new THREE.Color(COLORS[idx % COLORS.length]);
           const hsl = baseColor.getHSL({ h: 0, s: 0, l: 0 });
-          const targetHue = 0.6; // blue, change for other hues
+          const targetHue = theme === "dark" ? 0.6 : 0.58; // blue for dark, gold for light, tweak as you like
           baseColor.setHSL(targetHue, hsl.s, hsl.l);
           mat.color = baseColor;
           mat.emissive = baseColor;
@@ -240,6 +240,11 @@ const AnimatedWeb3Background: React.FC = () => {
 
   if (!mounted) return null;
 
+  const bgGradient =
+    theme === "dark"
+      ? "repeating-radial-gradient(circle at 50% 60%, #23253a 0%, #415485 80%, #23253a 100%)"
+      : "repeating-radial-gradient(circle at 50% 60%, #e0e7ef 0%, #b6c6e3 80%, #e0e7ef 100%)";
+
   return (
     <>
       <div
@@ -265,23 +270,16 @@ const AnimatedWeb3Background: React.FC = () => {
               left: 0;
               z-index: -2;
               pointer-events: none;
-              background: 
-                repeating-radial-gradient(circle at 50% 60%, #23253a 0%, #415485 80%, #23253a 100%);
+              background: ${bgGradient};
               opacity: 0.95;
               animation: waveMove 8s linear infinite;
               background-size: 200% 200%;
               background-position: 0% 50%;
             }
             @keyframes waveMove {
-              0% {
-                background-position: 0% 50%;
-              }
-              50% {
-                background-position: 100% 50%;
-              }
-              100% {
-                background-position: 0% 50%;
-              }
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
             }
           `}
         </style>

@@ -1,10 +1,12 @@
 :root {
   --background: #ffffff;
   --text: #222222;
+  /* ...other variables... */
 }
 [data-theme="dark"] {
   --background: #222222;
   --text: #ffffff;
+  /* ...other variables for dark mode... */
 }
 body {
   background: var(--background);
