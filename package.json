@@ -29,6 +29,8 @@
     "react-dom": "^19.0.0",
     "siwe": "^3.0.0",
     "tailwind-merge": "^3.3.1",
+    "three": "^0.177.0",
+    "three-stdlib": "^2.36.0",
     "viem": "^2.31.2",
     "wagmi": "^2.15.6"
   },
@@ -38,6 +40,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.177.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "prisma": "^6.9.0",
