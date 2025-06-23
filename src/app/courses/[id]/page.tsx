@@ -125,7 +125,7 @@ const sampleCourse: Course = {
     "Deploy simple smart contracts",
     "Recognize key security concepts"
   ],
-  banner: "/images/courses/eth-fundamentals-banner.jpg",
+  banner: "/images/courses/eth-fundamentals.jpg",
   videoPreview: "https://www.youtube.com/embed/TDGq4aeevgY",
   reviews: [
     {
