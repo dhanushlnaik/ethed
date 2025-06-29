@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import GlassNavigationBar from '@/components/GlassNavigationBar'
-import Footer from "@/components/footer"
 import { ThemeProvider } from "@/context/ThemeContext";
 import ThemeBackgroundWrapper from "@/components/ThemeBackgroundWrapper";
+import LayoutShell from "@/components/LayoutShell";
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -21,9 +20,9 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <ThemeBackgroundWrapper>
-            <GlassNavigationBar />
-            {children}
-            <Footer />
+            <LayoutShell>
+              {children}
+            </LayoutShell>
           </ThemeBackgroundWrapper>
         </ThemeProvider>
       </body>

@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Purple background is set via CSS on body */}
-      <AnimatedWeb3Background
+      <div
         style={{
           position: "fixed",
           zIndex: 0,
@@ -25,7 +25,9 @@ export default function HomePage() {
           height: "100vh",
           pointerEvents: "none",
         }}
-      />
+      >
+        <AnimatedWeb3Background />
+      </div>
       {/* Your main content */}
       <div className="relative z-10">
         {/* Navigation */}
