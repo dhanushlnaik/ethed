@@ -1,14 +1,15 @@
-import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from "@/context/ThemeContext";
 import ThemeBackgroundWrapper from "@/components/ThemeBackgroundWrapper";
 import LayoutShell from "@/components/LayoutShell";
 
-export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
-}
+export const metadata = {
+  title: 'Eth.Ed',
+  description: 'Created with Eth.Ed',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
 
 export default function RootLayout({
   children,

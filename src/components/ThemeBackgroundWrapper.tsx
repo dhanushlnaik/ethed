@@ -1,11 +1,12 @@
 "use client";
+
 import React from "react";
 import { useTheme } from "../context/ThemeContext";
 import AnimatedWeb3Background from "./AnimatedWeb3Background";
 import ThemeToggle from "./ThemeToggle";
 
 export default function ThemeBackgroundWrapper({ children }: { children: React.ReactNode }) {
-  const { theme } = useTheme();
+  useTheme();
   return (
     <>
       {/* Background animation, pointerEvents: none, zIndex: 0 */}
@@ -20,7 +21,7 @@ export default function ThemeBackgroundWrapper({ children }: { children: React.R
           pointerEvents: "none",
         }}
       >
-        <AnimatedWeb3Background theme={theme} />
+        <AnimatedWeb3Background />
       </div>
       {/* Theme toggle, high zIndex, pointerEvents: auto */}
       <div

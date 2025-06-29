@@ -1,42 +1,37 @@
 "use client";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-import React, { createContext, useEffect, useState, useContext } from "react";
-
-interface ThemeContextType {
-  theme: string;
-  toggleTheme: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
+type Theme = "light" | "dark";
+const ThemeContext = createContext<{ theme: Theme; toggleTheme: () => void }>({
+  theme: "dark",
   toggleTheme: () => {},
 });
 
-export const useTheme = () => useContext(ThemeContext);
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>("dark");
 
-export const ThemeProvider: React.FC<React.PropsWithChildren<object>> = ({ children }) => {
-  const [theme, setTheme] = useState("light"); // Default to light
-
-  // On mount, check localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored && stored !== theme) {
-      setTheme(stored);
-    }
-    // eslint-disable-next-line
+    // Check for saved theme in localStorage
+    const saved = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
+    if (saved === "light" || saved === "dark") setTheme(saved as Theme);
   }, []);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
+    if (typeof document !== "undefined") {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    }
   }, [theme]);
 
-  const toggleTheme = () =>
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
-};
+}
+
+export function useTheme() {
+  return useContext(ThemeContext);
+}
