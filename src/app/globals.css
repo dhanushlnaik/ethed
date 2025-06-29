@@ -12,7 +12,19 @@
   }
   body, html {
     @apply bg-background text-foreground;
-    background: #2D006A; /* or your gradient */
+    background: #18181b; /* or #0f172a or #222222 to match your cubes */
+    color: #fff;
+  }
+  body {
+    background: var(--background);
+    color: var(--text);
+  }
+  html[data-theme="light"], body[data-theme="light"] {
+    color: #000 !important;
+  }
+
+  html[data-theme="light"] *, body[data-theme="light"] * {
+    color: #000 !important;
   }
 }
 
@@ -34,6 +46,15 @@
     @apply absolute inset-0 bg-gradient-to-r from-blue-500/20 to-pink-500/20;
     clip-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
     transform: rotateX(-45deg) rotateY(-45deg);
+  }
+  /* Subtle glassmorphism and hover for all .glass-button */
+  .glass-button {
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  .glass-button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.15);
   }
 }
 
@@ -67,6 +88,11 @@
   100% {
     transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
   }
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Glassmorphism Utilities */
@@ -145,15 +171,15 @@
 /* Light Theme */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: transparent !important;
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: transparent !important;
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: transparent !important;
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: transparent !important;
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: transparent !important;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);

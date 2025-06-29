@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
+import { useTheme } from "@/context/ThemeContext";
 
 declare global {
   interface Window {
@@ -10,9 +11,15 @@ declare global {
 }
 
 const CUBE_GRID = 8;
-const COLORS = [
+
+const DARK_COLORS = [
   "#222222", "#444444", "#666666", "#888888",
   "#aaaaaa", "#cccccc", "#eeeeee", "#bbbbbb"
+];
+
+const LIGHT_COLORS = [
+  "#B4B4F7", "#C4C4F5", "#D0D0F0", "#DCDCF6",
+  "#E0E0F7", "#E9E4FE", "#D6C3FD", "#c084fc"
 ];
 
 interface CubeData {
@@ -27,6 +34,10 @@ const AnimatedWeb3Background: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const frameIdRef = useRef<number | null>(null);
   const [mounted, setMounted] = React.useState(false);
+  const { theme } = useTheme();
+
+  // Choose colors based on theme
+  const COLORS = theme === "dark" ? DARK_COLORS : LIGHT_COLORS;
 
   useEffect(() => {
     setMounted(true);
@@ -43,8 +54,8 @@ const AnimatedWeb3Background: React.FC = () => {
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
     camera.position.set(0, 0, 60);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setClearColor("#1a1a1a", 1);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0); // transparent
     renderer.setSize(width, height);
 
     if (mountRef.current && mountRef.current.childNodes.length === 0) {
@@ -65,15 +76,20 @@ const AnimatedWeb3Background: React.FC = () => {
       const baseRadius = 22 + Math.random() * 12;
 
       const color = COLORS[i % COLORS.length];
-      const sizeJitter = 1.9 + Math.random() * 0.7;
+      const sizeJitter = 2 + Math.random() * 0.7;
       const geometry = new THREE.BoxGeometry(sizeJitter, sizeJitter, sizeJitter, 8, 8, 8);
 
-      const material = new THREE.MeshStandardMaterial({
+      const material = new THREE.MeshPhysicalMaterial({
         color,
-        metalness: 0.08,
-        roughness: 0.85,
-        emissive: new THREE.Color(color),
-        emissiveIntensity: 0.06,
+        metalness: 0.05,
+        roughness: 0.85,      // High roughness for frosted effect
+        transmission: 0.85,   // High transmission for glassiness
+        thickness: 1.0,
+        ior: 1.3,
+        clearcoat: 0.05,
+        clearcoatRoughness: 0.8,
+        opacity: 0.55,        // Translucent
+        transparent: true,
       });
 
       const mesh = new THREE.Mesh(geometry, material);
@@ -134,7 +150,7 @@ const AnimatedWeb3Background: React.FC = () => {
       camera.lookAt(0, 0, 0);
 
       // Morphing: only between cube and sphere
-      const morphSpeed = 0.02;
+      const morphSpeed = 0.01;
       let targetBlendCube = 1 - Math.abs(smoothedMouse.x);
       targetBlendCube = Math.max(0, Math.min(1, targetBlendCube));
       if (typeof window !== "undefined") {
@@ -195,26 +211,26 @@ const AnimatedWeb3Background: React.FC = () => {
         const scale = 1 + (1 - cubeData.progress) * 2.5;
         cubeData.mesh.scale.set(scale, scale, scale);
 
-        // Animate opacity: invisible when close, fades in as it joins
-        let opacity;
-        if (cubeData.progress < 0.5) {
-          opacity = Math.max(0.05, cubeData.progress * 1.2);
-        } else {
-          opacity = Math.min(1, 0.2 + (cubeData.progress - 0.5) * 1.6);
-        }
-        const mat = cubeData.mesh.material as THREE.MeshStandardMaterial;
+        // Calculate distance from cube to camera
+        const distance = cubeData.mesh.position.distanceTo(camera.position);
+
+        // Set min/max distances for mapping (tweak as needed)
+        const minDist = 10;   // closer than this = most transparent
+        const maxDist = 60;   // farther than this = most opaque
+
+        // Map distance to opacity (closer = more transparent)
+        let opacity = (distance - minDist) / (maxDist - minDist);
+        opacity = Math.max(0.22, Math.min(1, opacity)); // Clamp between 0.15 and 1
+
+        const mat = cubeData.mesh.material as THREE.MeshPhysicalMaterial;
         mat.opacity = opacity;
         mat.transparent = opacity < 1;
 
-        // Once joined, let the cube morph as usual
-        if (cubeData.progress >= 1) {
-          const baseColor = new THREE.Color(COLORS[idx % COLORS.length]);
-          const hsl = baseColor.getHSL({ h: 0, s: 0, l: 0 });
-          const targetHue = 0.6; // blue, change for other hues
-          baseColor.setHSL(targetHue, hsl.s, hsl.l);
-          mat.color = baseColor;
-          mat.emissive = baseColor;
-        }
+        // Always set color and emissive for smoothness
+        const baseColor = new THREE.Color(COLORS[idx % COLORS.length]);
+        mat.color = baseColor;
+        mat.emissive = baseColor;
+        mat.emissiveIntensity = theme === "dark" ? 0.12 : 0.25; // Subtle glow, tweak as you like
       });
 
       // Smooth the mouse movement
@@ -236,57 +252,12 @@ const AnimatedWeb3Background: React.FC = () => {
         while (mountRef.current.firstChild)
           mountRef.current.removeChild(mountRef.current.firstChild);
     };
-  }, [mounted]);
+  }, [COLORS, mounted, theme]);
 
   if (!mounted) return null;
 
   return (
     <>
-      <div
-        style={{
-          position: "fixed",
-          zIndex: -2,
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          pointerEvents: "none",
-          overflow: "hidden",
-        }}
-        aria-hidden="true"
-      >
-        <style>
-          {`
-            .wave-bg {
-              position: absolute;
-              width: 100vw;
-              height: 100vh;
-              top: 0;
-              left: 0;
-              z-index: -2;
-              pointer-events: none;
-              background: 
-                repeating-radial-gradient(circle at 50% 60%, #23253a 0%, #415485 80%, #23253a 100%);
-              opacity: 0.95;
-              animation: waveMove 8s linear infinite;
-              background-size: 200% 200%;
-              background-position: 0% 50%;
-            }
-            @keyframes waveMove {
-              0% {
-                background-position: 0% 50%;
-              }
-              50% {
-                background-position: 100% 50%;
-              }
-              100% {
-                background-position: 0% 50%;
-              }
-            }
-          `}
-        </style>
-        <div className="wave-bg" />
-      </div>
       <div
         ref={mountRef}
         style={{
@@ -297,9 +268,29 @@ const AnimatedWeb3Background: React.FC = () => {
           width: "100vw",
           height: "100vh",
           pointerEvents: "none",
+          backgroundColor: theme === "dark" ? "#18181b" : undefined,
+          backgroundImage: theme === "dark"
+            ? undefined
+            : "linear-gradient(-45deg, #B4B4F7, #D0D0F0, #B4B4F7, #E0E0F7, #c084fc)",
+          backgroundSize: theme === "dark" ? undefined : "400% 400%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          animation: theme === "dark" ? undefined : "waveLight 8s ease-in-out infinite",
+          transition: "background 0.5s",
         }}
         aria-hidden="true"
       />
+      {theme !== "dark" && (
+        <style>
+          {`
+            @keyframes waveLight {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+          `}
+        </style>
+      )}
     </>
   );
 };

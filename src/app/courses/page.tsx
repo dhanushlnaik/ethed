@@ -307,7 +307,7 @@ export default function CoursesCatalogPage() {
 
   // Render
   return (
-    <div className="relative min-h-screen bg-gradient-to-tr from-charcoal via-blue-950 to-black overflow-x-hidden pb-16">
+    <div className="relative min-h-screen bg-transparent overflow-x-hidden pb-16">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center pt-24 pb-14 px-4 sm:px-8">
         <motion.div
