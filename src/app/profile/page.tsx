@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Pencil, Check, Link2, X, User, MapPin, Mail, Star, BookOpen, Trophy, Shield, Bell, Trash2, EyeOff, ArrowUpRight, BadgeCheck, Plus, Share2 } from "lucide-react";
 import classNames from "classnames";
+import Link from "next/link";
 
 // --- Types ---
 interface Skill {
@@ -605,7 +606,14 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black pb-20 overflow-x-hidden pt-20">
       <section className="max-w-5xl mx-auto px-4 sm:px-8 pt-12">
-        <ProfileHeader user={profile} setUser={setProfile} />
+        <div className="flex justify-between items-center mb-8">
+          <ProfileHeader user={profile} setUser={setProfile} />
+          <Link href="/creator">
+            <GlassButton className="flex items-center gap-2">
+              <Plus className="w-5 h-5" /> Create Course
+            </GlassButton>
+          </Link>
+        </div>
         {/* Tab Nav */}
         <div className="flex gap-3 mb-7 mt-1">
           {tabs.map(t => (

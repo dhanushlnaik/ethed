@@ -12,6 +12,7 @@ export function GlassButton({ children, className, variant = "primary", size = "
     primary:
       "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-white/30 text-white hover:from-cyan-500/30 hover:to-purple-500/30",
     secondary: "bg-white/10 border-white/20 text-white hover:bg-white/15",
+    
     ghost: "bg-transparent border-transparent text-white hover:bg-white/10",
   }
 
