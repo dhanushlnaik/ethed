@@ -1,8 +1,133 @@
+/* Imports */
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* Tailwind Directives */
+@tailwind utilities;
 
+/* Base Layer */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body, html {
+    @apply bg-background text-foreground;
+    background: #18181b; /* or #0f172a or #222222 to match your cubes */
+    color: #fff;
+  }
+  body {
+    background: var(--background);
+    color: var(--text);
+  }
+  html[data-theme="light"], body[data-theme="light"] {
+    color: #000 !important;
+  }
+
+  html[data-theme="light"] *, body[data-theme="light"] * {
+    color: #000 !important;
+  }
+}
+
+/* Components Layer */
+@layer components {
+  .diamond-3d {
+    @apply w-full h-full relative;
+    transform-style: preserve-3d;
+    animation: rotate3d 20s linear infinite;
+  }
+  .diamond-3d::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-purple-500/30;
+    clip-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
+    transform: rotateX(45deg) rotateY(45deg);
+  }
+  .diamond-3d::after {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-blue-500/20 to-pink-500/20;
+    clip-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
+    transform: rotateX(-45deg) rotateY(-45deg);
+  }
+  /* Subtle glassmorphism and hover for all .glass-button */
+  .glass-button {
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  .glass-button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.15);
+  }
+}
+
+/* Utilities Layer */
+@layer utilities {
+  .animate-float-slow {
+    animation: float 6s ease-in-out infinite;
+  }
+  .animate-float-medium {
+    animation: float 4s ease-in-out infinite;
+  }
+  .animate-float-fast {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+/* Keyframes */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+@keyframes rotate3d {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glassmorphism Utilities */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+.glass-hover {
+  transition: all 0.3s ease;
+}
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Theme Variables */
+@custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -43,17 +168,18 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* Light Theme */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: transparent !important;
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: transparent !important;
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: transparent !important;
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: transparent !important;
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: transparent !important;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -78,6 +204,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Dark Theme */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -110,13 +237,4 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }
