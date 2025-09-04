@@ -1,30 +1,32 @@
-import './globals.css'
-import { ThemeProvider } from "@/context/ThemeContext";
-import ThemeBackgroundWrapper from "@/components/ThemeBackgroundWrapper";
-import LayoutShell from "@/components/LayoutShell";
+import type { Metadata } from "next";
+import { Space_Grotesk } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import Web3Provider from "@/components/web3-provider";
 
-export const metadata = {
-  title: 'Eth.Ed',
-  description: 'Created with Eth.Ed',
-  icons: {
-    icon: '/favicon.ico',
-  },
+const exo2 = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-exo2",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "EIPsInsight",
+  description: "Ethereum Improvement Proposals simplified",
 };
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
-        <ThemeProvider>
-          <ThemeBackgroundWrapper>
-            <LayoutShell>
-              {children}
-            </LayoutShell>
-          </ThemeBackgroundWrapper>
+    <html lang="en" style={{ scrollBehavior: "smooth" }} suppressHydrationWarning>
+      <body className={`${exo2.variable} antialiased`} suppressHydrationWarning>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>\
+          <Web3Provider>
+        {children}
+        </Web3Provider>
+        <Toaster/>
         </ThemeProvider>
       </body>
     </html>

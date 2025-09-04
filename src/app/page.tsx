@@ -1,104 +1,99 @@
-import { GlassNavigation } from "@/components/glass-navigation"
-import { DynamicTitleAnimation } from "@/components/dynamic-title-animation"
-import { GlassButton } from "@/components/ui/glass-button"
-import { CourseProgressPanel } from "@/components/course-progress-panel"
-import { NFTCertificates } from "@/components/nft-certificates"
-import { ArrowRight, Play, Users, BookOpen, Trophy } from "lucide-react"
-import Link from "next/link"
-// If the file is actually named 'HeroCtaButton.tsx' (PascalCase), update the import:
-import { HeroCTAButton } from "@/components/HeroCTAButton"
-// Or, if the file is named differently, adjust the path and casing accordingly.
-// If the file does not exist, create it at 'src/components/ui/HeroCtaButton.tsx' and export HeroCTAButton from it.
-import AnimatedWeb3Background from "@/components/AnimatedWeb3Background"
+"use client";
 
-export default function HomePage() {
-  return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Purple background is set via CSS on body */}
-      <div
-        style={{
-          position: "fixed",
-          zIndex: 0,
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          pointerEvents: "none",
-        }}
-      >
-        <AnimatedWeb3Background />
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
+export default function Home() {
+  const router = useRouter();
+  const {
+    data: session,
+    isPending,
+    error,
+    refetch,
+  } = authClient.useSession();
+
+  async function handleSignOut() {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+          toast.success("Signed out successfully");
+        },
+        onError: (err) => {
+          toast.error("Error signing out");
+          console.error("Error signing out:", err);
+        },
+      },
+    });
+    refetch();
+  }
+
+  if (isPending) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <span className="text-lg font-semibold">Loading...</span>
       </div>
-      {/* Your main content */}
-      <div className="relative z-10">
-        {/* Navigation */}
-        <GlassNavigation />
+    );
+  }
 
-        {/* Main Content */}
-        <main className="pt-24 pb-16">
-          {/* Hero Section */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-              {/* Left Hero Content */}
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <DynamicTitleAnimation />
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white">Web3 Development</h2>
-                  <p className="text-lg md:text-xl text-white/70 max-w-2xl">
-                    Master blockchain development with hands-on courses, earn NFT certificates, and join the future of
-                    decentralized technology.
-                  </p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <GlassButton variant="primary" size="lg" className="group">
-                    Start Learning
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </GlassButton>
-
-                  <GlassButton variant="secondary" size="lg" className="group">
-                    <Play className="w-5 h-5 mr-2" />
-                    Watch Demo
-                  </GlassButton>
-
-                  <HeroCTAButton
-                    as={Link}
-                    href="/courses"
-                    className="flex items-center justify-center gap-2"
-                  >
-                    Explore Courses
-                  </HeroCTAButton>
-                </div>
-
-                {/* Stats */}
-                <div className="flex items-center space-x-8 pt-8">
-                  <div className="flex items-center space-x-2">
-                    <Users className="w-5 h-5 text-cyan-400" />
-                    <span className="text-white/80">10K+ Students</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <BookOpen className="w-5 h-5 text-purple-400" />
-                    <span className="text-white/80">50+ Courses</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Trophy className="w-5 h-5 text-yellow-400" />
-                    <span className="text-white/80">NFT Rewards</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Progress Panel */}
-              <div className="lg:pl-8">
-                <CourseProgressPanel />
+  return (
+    <>
+      {session ? (
+        <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center">
+          <h1 className="text-3xl font-bold">Welcome, {session.user?.email}!</h1>
+          <p className="mt-4 text-muted-foreground">You are logged in.</p>
+          <Button
+            variant="default"
+            className="mt-6"
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </Button>
+        </div>
+      ) : (
+        <div className="relative flex flex-col min-h-screen">
+          {/* Main Section */}
+          <div className="flex flex-col md:flex-row items-center justify-between flex-1 px-8 md:px-16 lg:px-32">
+            {/* Left Content */}
+            <div className="max-w-lg text-center md:text-left">
+              <h1 className="text-5xl font-bold leading-tight">
+                Learn Ethereum.
+                <br />
+                Earn On-Chain.
+              </h1>
+              <p className="mt-6 text-lg text-muted-foreground">
+                A modular, Ethereum-powered learning platform where every lesson brings you
+                closer to NFTs, tokens, and on-chain proof of learning.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Button className="bg-pink-500 hover:bg-pink-600 text-white">
+                  Explore Courses
+                </Button>
+                <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50">
+                  Connect Wallet
+                </Button>
               </div>
             </div>
-          </section>
 
-          {/* NFT Certificates Section */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
-            <NFTCertificates />
-          </section>
-        </main>
-      </div>
-    </div>
-  )
+            {/* Right Card */}
+            <div className="mt-12 md:mt-0">
+              <div className="relative">
+                <div className="absolute -bottom-4 -right-4 w-80 h-64 bg-pink-400 rounded-xl"></div>
+                <Card className="relative w-80 h-64 rounded-xl shadow-md" />
+              </div>
+            </div>
+          </div>
+
+          {/* Footer Banner */}
+          <div className="w-full bg-rose-50 border-t border-black py-3 text-center text-sm font-medium">
+            Connect your wallet, start a course, and earn rewards as you progress.{" "}
+            <span className="font-bold">Knowledge is gasless. Rewards are forever.</span>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
