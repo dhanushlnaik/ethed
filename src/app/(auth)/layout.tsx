@@ -23,7 +23,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       {/* 📜 Disclaimer */}
       <p className="mt-6 max-w-xs text-sm text-black/70 dark:text-[#f8f6f2]/70">
         By clicking{" "}
-        <span className="font-semibold">"Continue with GitHub/Google"</span>, you agree to our{" "}
+       <span className="font-semibold">&quot;Continue with GitHub/Google&quot;</span>, you agree to our{" "}
         <Link href="/terms" className="text-[#129490] dark:text-[#f8f6f2] hover:underline">
           Terms of Service
         </Link>{" "}

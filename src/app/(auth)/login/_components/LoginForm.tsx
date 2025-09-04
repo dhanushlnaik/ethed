@@ -74,10 +74,19 @@ const siwe = new SiweMessage({
     if (error) throw error;
     toast.success("Signed in with Ethereum!");
     router.push("/");
-  } catch (err: any) {
-    toast.error(err?.message ?? "Ethereum sign-in failed");
+  } catch (err: unknown) {
+  if (err instanceof Error) {
+    toast.error(err.message);
     console.error(err);
-  } finally {
+  } else if (typeof err === "string") {
+    toast.error(err);
+    console.error(err);
+  } else {
+    toast.error("Ethereum sign-in failed");
+    console.error(err);
+  }
+}
+finally {
     setEthLoading(false);
   }
 }
