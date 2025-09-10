@@ -23,7 +23,7 @@ export default function Web3Provider({ children }: { children: React.ReactNode }
     () =>
       getDefaultConfig({
         appName: "EthEd",
-        projectId: env.WALLETCONNECT_PROJECT_ID,
+        projectId: "06d5aabaf648a4f5bce6c27afe95f1f1",
         chains: [mainnet, base, polygon, arbitrum, optimism, sepolia],
         ssr: true,
         transports: {

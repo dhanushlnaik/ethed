@@ -32,5 +32,6 @@ export const env = createEnv({
     ARCJET_KEY: z.string().min(1),
   },
   experimental__runtimeEnv: {
+  
   },
 });
